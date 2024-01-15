@@ -1,0 +1,14 @@
+.IframeItem {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px 16px;
+  background-color: #fff;
+  min-height: 800px;
+  width: 100%;
+}
+
+.IframeItem__memo {
+  font-size: 1.2rem;
+  white-space: pre-wrap;
+}
