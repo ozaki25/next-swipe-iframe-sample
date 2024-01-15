@@ -1,9 +1,14 @@
 .IframeList {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   padding: 32px 0;
+  width: 100%;
+  overflow-x: scroll;
+}
+
+.IframeList__container {
+  display: flex;
+}
+
+.IframeList__container > * {
+  flex-shrink: 0;
+  width: 100%;
 }
