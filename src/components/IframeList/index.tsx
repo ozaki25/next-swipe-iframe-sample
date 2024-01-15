@@ -26,10 +26,10 @@ const list = [
 ];
 
 function IframeList() {
-  const [selectedId, setSelectedId] = useState<number>(1);
+  const [selectedId, setSelectedId] = useState<number>(0);
   const [itemElements, setItemElements] = useState<HTMLElement[]>([]);
   const containerRef = useRef<HTMLSelectElement>(null);
-  const animationRef = useRef<AnimationPlaybackControls>();
+  const animationRef = useRef<AnimationPlaybackControls | null>(null);
 
   const getIndex = (x: number): number => {
     // xは横スクロール全体の幅を1とした時の現在の位置(0〜1)
@@ -65,12 +65,11 @@ function IframeList() {
 
   useEffect(() => {
     const container = containerRef.current;
-    console.log(scrollXProgress.getVelocity());
+    const animation = animationRef.current;
 
-    if (!container) return;
-    // if (scrollXProgress.getVelocity() && !animationRef.current) {
-    //   return;
-    // }
+    if (!container || animation) {
+      return;
+    }
 
     animationRef.current?.stop();
     animationRef.current = animate(
@@ -91,7 +90,7 @@ function IframeList() {
         onComplete: () => {
           console.log('onComplete');
           container.style.scrollSnapType = '';
-          animationRef.current = undefined;
+          animationRef.current = null;
         },
       },
     );
