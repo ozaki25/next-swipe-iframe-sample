@@ -1,3 +1,4 @@
+import IframeItem from '~/components/IframeItem';
 import style from './style.module.css';
 
 const list = [
@@ -18,19 +19,8 @@ const list = [
 function IframeList() {
   return (
     <section className={style.IframeList}>
-      {list.map(({ url, memo }) => (
-        <article className={style.IframeList__article}>
-          <iframe
-            width="100%"
-            height="315"
-            src={url}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe>
-          <p className={style.IframeList__memo}>{memo}</p>
-        </article>
+      {list.map(({ url, memo }, i) => (
+        <IframeItem url={url} memo={memo} key={i} />
       ))}
     </section>
   );
