@@ -59,24 +59,19 @@ function IframeList({ list, defaultIndex }: Props) {
   const { scrollXProgress } = useScroll({ container: containerRef });
 
   const getCurrentIndex = (x: number): number => {
-    // xは横スクロール全体の幅を1とした時の現在の位置(0〜1)
-    // 1枚目の半分を超えたら1、2枚目の半分を超えたら2、といった値を返す
+    // xは横スクロール全体の幅を1とした時の現在の位置(0〜1.0)
+    // scroll-snapでスナップされる位置と同じように、1枚目の半分を超えたら1、2枚目の半分を超えたら2、といった値を返す
     return Math.round(x / (1 / (list.length - 1)));
   };
 
-  useMotionValueEvent(scrollXProgress, 'change', (x) => {
-    if (animationRef.current) return;
-    setSelectedIndex(getCurrentIndex(x));
-  });
-
-  useEffect(() => {
+  const scroll = (nextIndex: number) => {
     const container = containerRef.current;
     if (!container) return;
 
     animationRef.current?.stop();
     animationRef.current = animate(
       container.scrollLeft,
-      container.scrollWidth * (selectedIndex / list.length),
+      container.scrollWidth * (nextIndex / list.length),
       {
         duration: 0.3,
         onUpdate: (v) => {
@@ -85,6 +80,7 @@ function IframeList({ list, defaultIndex }: Props) {
         },
         onPlay: () => {
           console.log('onPlay');
+          // アニメーション中はスナップを無効ししないとカクついてしまう
           container.style.scrollSnapType = 'none';
         },
         onComplete: () => {
@@ -94,17 +90,38 @@ function IframeList({ list, defaultIndex }: Props) {
         },
       },
     );
-  }, [selectedIndex]);
+  };
+
+  const onClickPrev = () => {
+    setSelectedIndex(selectedIndex - 1);
+    scroll(selectedIndex - 1);
+  };
+
+  const onClickNext = () => {
+    setSelectedIndex(selectedIndex + 1);
+    scroll(selectedIndex + 1);
+  };
+
+  useMotionValueEvent(scrollXProgress, 'change', (x) => {
+    if (animationRef.current) return;
+    // スクロールで切り替えた時にindexの同期をとる
+    setSelectedIndex(getCurrentIndex(x));
+  });
+
+  useEffect(() => {
+    if (containerRef.current && defaultIndex) {
+      containerRef.current.scrollLeft =
+        containerRef.current.scrollWidth * (defaultIndex / list.length);
+    }
+  }, [defaultIndex]);
 
   return (
     <section className={style.IframeList}>
       <p>index: {selectedIndex}</p>
       <div>
-        {selectedIndex > 0 && (
-          <PrevButton onClick={() => setSelectedIndex(selectedIndex - 1)} />
-        )}
+        {selectedIndex > 0 && <PrevButton onClick={onClickPrev} />}
         {selectedIndex < list.length - 1 && (
-          <NextButton onClick={() => setSelectedIndex(selectedIndex + 1)} />
+          <NextButton onClick={onClickNext} />
         )}
         <div ref={containerRef} className={style.IframeList__container}>
           {list.map(({ url, memo }, index) => (
