@@ -1,6 +1,13 @@
 .IframeList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 32px 0;
+}
+
+.IframeList__main {
   position: relative;
+  width: calc(100% - 64px);
 }
 
 .IframeList__container {
