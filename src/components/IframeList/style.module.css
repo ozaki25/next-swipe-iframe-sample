@@ -1,14 +1,46 @@
 .IframeList {
   padding: 32px 0;
-  width: 100%;
-  overflow-x: scroll;
+  position: relative;
 }
 
 .IframeList__container {
   display: flex;
+  scroll-snap-type: x mandatory;
+  overflow: auto;
 }
 
 .IframeList__container > * {
   flex-shrink: 0;
   width: 100%;
+  scroll-snap-align: start;
+}
+
+.PrevButton,
+.NextButton {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  background-color: #333;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.PrevButton {
+  position: absolute;
+  left: 40px;
+  top: 50%;
+  bottom: 50%;
+  transform: translateY(-50%);
+}
+
+.NextButton {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  bottom: 50%;
+  transform: translateY(-50%);
 }
