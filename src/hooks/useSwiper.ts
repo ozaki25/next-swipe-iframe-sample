@@ -38,30 +38,33 @@ function useSwiper({ listSize, index }: Props) {
   /**
    * 引数で渡したindexの位置までアニメーションつきでスクロールさせる
    */
-  const scrollTo = (nextIndex: number) => {
-    const container = containerRef.current;
-    if (!container) return;
+  const scrollTo = useCallback(
+    (nextIndex: number) => {
+      const container = containerRef.current;
+      if (!container) return;
 
-    animationRef.current?.stop();
-    animationRef.current = animate(
-      container.scrollLeft,
-      container.scrollWidth * (nextIndex / listSize),
-      {
-        duration: 0.3,
-        onUpdate: (v) => {
-          container.scrollLeft = v;
+      animationRef.current?.stop();
+      animationRef.current = animate(
+        container.scrollLeft,
+        container.scrollWidth * (nextIndex / listSize),
+        {
+          duration: 0.3,
+          onUpdate: (v) => {
+            container.scrollLeft = v;
+          },
+          onPlay: () => {
+            // アニメーション中はスナップを無効ししないとカクついてしまう
+            container.style.scrollSnapType = 'none';
+          },
+          onComplete: () => {
+            container.style.scrollSnapType = '';
+            animationRef.current = null;
+          },
         },
-        onPlay: () => {
-          // アニメーション中はスナップを無効ししないとカクついてしまう
-          container.style.scrollSnapType = 'none';
-        },
-        onComplete: () => {
-          container.style.scrollSnapType = '';
-          animationRef.current = null;
-        },
-      },
-    );
-  };
+      );
+    },
+    [listSize],
+  );
 
   /**
    * 前のindexにスクロールさせる
@@ -70,7 +73,7 @@ function useSwiper({ listSize, index }: Props) {
     if (isFirst) return;
     setSelectedIndex(selectedIndex - 1);
     scrollTo(selectedIndex - 1);
-  }, [selectedIndex]);
+  }, [selectedIndex, isFirst, scrollTo]);
 
   /**
    * 次のindexにスクロールさせる
@@ -79,7 +82,7 @@ function useSwiper({ listSize, index }: Props) {
     if (isLast) return;
     setSelectedIndex(selectedIndex + 1);
     scrollTo(selectedIndex + 1);
-  }, [selectedIndex]);
+  }, [selectedIndex, isLast, scrollTo]);
 
   /**
    * containerRefの要素のスクロール位置が変わる度に呼ばれてindeをさ最新化する
@@ -98,7 +101,7 @@ function useSwiper({ listSize, index }: Props) {
     if (container && index) {
       container.scrollLeft = container.scrollWidth * (index / listSize);
     }
-  }, [index]);
+  }, [index, listSize]);
 
   return {
     toPrev,
