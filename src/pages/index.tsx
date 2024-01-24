@@ -29,14 +29,18 @@ export default function Home() {
         <h1>Next Swipe Iframe Sample</h1>
         <p>iframeをスワイプして次のiframeに表示を切り換えるサンプル</p>
         <p>以下のページを参考にした</p>
-        <p>
-          <a href="https://react-spectrum.adobe.com/react-aria/examples/swipeable-tabs.html">
-            https://react-spectrum.adobe.com/react-aria/examples/swipeable-tabs.html
-          </a>
-        </p>
-        <p>ああああ</p>
-        <p>ああああ</p>
-        <p>ああああ</p>
+        <ul>
+          <li>
+            <a href="https://react-spectrum.adobe.com/react-aria/examples/swipeable-tabs.html">
+              https://react-spectrum.adobe.com/react-aria/examples/swipeable-tabs.html
+            </a>
+          </li>
+          <li>
+            <a href="https://www.w3.org/WAI/ARIA/apg/patterns/carousel/examples/carousel-1-prev-next/">
+              https://www.w3.org/WAI/ARIA/apg/patterns/carousel/examples/carousel-1-prev-next/
+            </a>
+          </li>
+        </ul>
         <IframeList list={list} defaultIndex={1} />
       </main>
     </>
