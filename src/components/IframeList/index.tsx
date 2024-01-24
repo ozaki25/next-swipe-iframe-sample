@@ -17,14 +17,31 @@ function IframeList({ list, defaultIndex }: Props) {
       listSize: list.length,
     });
   return (
-    <section className={style.IframeList}>
-      <p>index: {selectedIndex}</p>
+    <section
+      className={style.IframeList}
+      aria-roledescription="carousel"
+      aria-label="マーカッポ動画一覧"
+    >
+      <p>
+        {list.length}枚中の{selectedIndex + 1}枚目
+      </p>
       <div className={style.IframeList__main}>
         {!isFirst && <PrevButton onClick={toPrev} />}
         {!isLast && <NextButton onClick={toNext} />}
-        <div ref={containerRef} className={style.IframeList__container}>
+        <div
+          ref={containerRef}
+          className={style.IframeList__container}
+          aria-live="polite" // 動画が切り替わった時に支援技術に伝える
+        >
           {list.map(({ url, memo }, index) => (
-            <IframeItem key={index} url={url} memo={memo} />
+            <IframeItem
+              key={index}
+              url={url}
+              memo={memo}
+              current={index + 1}
+              total={list.length}
+              hidden={selectedIndex !== index}
+            />
           ))}
         </div>
       </div>
