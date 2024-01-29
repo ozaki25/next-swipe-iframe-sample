@@ -42,7 +42,6 @@ function useSwiper({ listSize, index }: Props) {
     (nextIndex: number) => {
       const container = containerRef.current;
       if (!container) return;
-
       animationRef.current?.stop();
       animationRef.current = animate(
         container.scrollLeft,
@@ -102,6 +101,21 @@ function useSwiper({ listSize, index }: Props) {
       container.scrollLeft = container.scrollWidth * (index / listSize);
     }
   }, [index, listSize]);
+
+  /**
+   * このhooksを呼んでいるコンポーネントを表示してる間はキーボードの左右キーでスライドを切り替えられるようにする
+   */
+  useEffect(() => {
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        toPrev();
+      } else if (e.key === 'ArrowRight') {
+        toNext();
+      }
+    };
+    window.addEventListener('keydown', onKeydown);
+    return () => window.removeEventListener('keydown', onKeydown);
+  }, [toPrev, toNext]);
 
   return {
     toPrev,
