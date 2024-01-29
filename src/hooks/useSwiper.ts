@@ -106,6 +106,9 @@ function useSwiper({ listSize, index }: Props) {
     }
   }, [index, listSize]);
 
+  /**
+   * このhooksを呼んでいるコンポーネンを表示してる間はキーボードの左右キーでスライドを切り替えられるようにする
+   */
   useEffect(() => {
     const onKeydown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
