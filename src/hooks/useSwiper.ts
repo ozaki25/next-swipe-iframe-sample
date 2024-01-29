@@ -69,9 +69,7 @@ function useSwiper({ listSize, index }: Props) {
    * 前のindexにスクロールさせる
    */
   const toPrev = useCallback(() => {
-    console.log('toPrev');
     if (isFirst) return;
-    console.log({ selectedIndex });
     setSelectedIndex(selectedIndex - 1);
     scrollTo(selectedIndex - 1);
   }, [selectedIndex, isFirst, scrollTo]);
@@ -80,9 +78,7 @@ function useSwiper({ listSize, index }: Props) {
    * 次のindexにスクロールさせる
    */
   const toNext = useCallback(() => {
-    console.log('toNext');
     if (isLast) return;
-    console.log({ selectedIndex });
     setSelectedIndex(selectedIndex + 1);
     scrollTo(selectedIndex + 1);
   }, [selectedIndex, isLast, scrollTo]);
